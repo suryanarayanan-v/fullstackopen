@@ -1,0 +1,9 @@
+GET https://phonebook-snowy-leaf-5926.fly.dev/api/persons
+###
+POST localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "aristotle",
+  "number": "23249-32235"
+}
