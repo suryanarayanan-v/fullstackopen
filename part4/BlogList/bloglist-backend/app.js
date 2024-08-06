@@ -1,4 +1,5 @@
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const config = require('./utils/config')
 const cors = require('cors')
