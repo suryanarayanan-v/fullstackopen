@@ -5,7 +5,6 @@ const app = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
-const {getNonExistentId} = require('./test_helper')
 const api = supertest(app)
 
 
@@ -145,3 +144,5 @@ describe('updating blogs', () => {
 after(async () => {
   mongoose.connection.close()
 })
+
+

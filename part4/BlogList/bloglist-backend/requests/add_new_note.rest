@@ -2,10 +2,11 @@ POST localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Tis a title",
-  "author": "surya_v",
+  "title": "Example Blog 2",
+  "author": "Surya V",
   "url": "www.example.com",
-  "likes": 34232
+  "likes": 342323,
+  "user": "66b4add6363999520e6b38ac"
 }
 
 ###
