@@ -17,7 +17,7 @@ mongoose.connect(mongoUrl)
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/blogs', Blogs)
+app.use('/api/blogs', middleware.userExtractor, Blogs)
 app.use('/api/users', Users)
 app.use('/api/login', Login)
 
