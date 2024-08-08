@@ -4,13 +4,22 @@ const assert = require('assert')
 const app = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 const api = supertest(app)
 
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
+  await api.post('/api/users').send(helper.initialUser).expect(201)
+  const token = await helper.getToken()
+
+  for (const blog of helper.initialBlogs) {
+    await api.post('/api/blogs')
+      .send(blog)
+      .set('Authorization', 'Bearer ' + token)
+  }
 })
 
 test('notes of db is same as initial', async () => {
@@ -28,6 +37,8 @@ test('id of notes is not defied as _id', async () => {
 })
 
 test('creating a new blog adds it to db', async () => {
+  const token = await helper.getToken()
+
   const newBlog = {
     title: 'This is a new blog',
     author: 'John Doe',
@@ -37,6 +48,7 @@ test('creating a new blog adds it to db', async () => {
 
   await api.post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', 'Bearer ' + token)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -49,6 +61,8 @@ test('creating a new blog adds it to db', async () => {
 })
 
 test('blogs with no likes property is set to 0', async () => {
+  const token = await helper.getToken()
+
   const newBlog = {
     title: 'This is a new blog',
     author: 'John Doe',
@@ -57,6 +71,7 @@ test('blogs with no likes property is set to 0', async () => {
 
   await api.post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', 'Bearer ' + token)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -93,10 +108,14 @@ describe('blogs without critical information', () => {
 
 describe('deleting blogs', () => {
   test('deleting valid blogs', async () => {
+    const token = await helper.getToken()
+
     const blogsInDb = await helper.getBlogsInDb()
     const blogToBeDeleted = blogsInDb[0].id
 
-    await api.delete(`/api/blogs/${blogToBeDeleted}`)
+    await api
+      .delete(`/api/blogs/${blogToBeDeleted}`)
+      .set('Authorization', 'Bearer ' + token)
       .expect(204)
 
     const blogDbAfterDeletion = await helper.getBlogsInDb()
@@ -140,6 +159,30 @@ describe('updating blogs', () => {
       .expect(404)
   })
 })
+
+describe('Creation and deletion of notes without token', () => {
+  test('creating notes without valid Token', async () => {
+    const newBlog = {
+      title: 'This is a new blog',
+      author: 'John Doe',
+      url: 'https://blog.com',
+      likes: 7
+    }
+
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+  })
+
+  test('deleting a note without valid Token', async () => {
+    const blogsInDb = await helper.getBlogsInDb()
+    const blogToBeDeleted = blogsInDb[0].id
+
+    await api
+      .delete(`/api/blogs/${blogToBeDeleted}`)
+      .expect(401)
+  })
+});
 
 after(async () => {
   mongoose.connection.close()
