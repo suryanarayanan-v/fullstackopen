@@ -9,6 +9,7 @@ const Users = require('./controllers/users')
 const Login = require('./controllers/login')
 const middleware = require('./utils/middleware')
 
+app.use(middleware.tokenExtractor)
 
 const mongoUrl = config.MONGO_URI
 mongoose.connect(mongoUrl)
