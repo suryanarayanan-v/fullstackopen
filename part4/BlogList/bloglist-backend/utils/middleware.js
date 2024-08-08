@@ -21,7 +21,10 @@ const errorHandler = (err, req, res, next) => {
     res.status(400).json({ error: 'username expected to be unique' })
   } else if (err.name === 'TokenExpiredError') {
     res.status(401).json({ error: 'token expired' })
+  } else if (err.name === 'CastError') {
+    res.status(400).json({ error: 'illegal id' })
   }
+  res.status(500).json({ error: err.name })
 }
 
 module.exports = {
