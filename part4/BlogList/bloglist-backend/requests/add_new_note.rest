@@ -1,12 +1,12 @@
 POST localhost:3001/api/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cnlhX3YgIiwiaWQiOiI2NmI0YWRkNjM2Mzk5OTUyMGU2YjM4YWMiLCJpYXQiOjE3MjMxMTk2MjAsImV4cCI6MTcyMzEyMzIyMH0.fmOpXXyW6FyJv7fetdxkpAECRpW5GiVudAsG3wiGyCE
 Content-Type: application/json
 
 {
-  "title": "Example Blog 2",
+  "title": "Example Blog 4",
   "author": "Surya V",
   "url": "www.example.com",
-  "likes": 342323,
-  "user": "66b4add6363999520e6b38ac"
+  "likes": 342323
 }
 
 ###

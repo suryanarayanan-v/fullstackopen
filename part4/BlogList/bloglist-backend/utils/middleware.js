@@ -8,9 +8,11 @@ const errorHandler = (err, req, res, next) => {
   logger.error(err.message)
 
   if (err.name === 'ValidationError') {
-    res.status(400).json({ error: 'username too short' });
+    res.status(400).json({ error: 'username too short' })
   } else if (err.message.includes('E11000 duplicate key error')) {
-    res.status(400).json({ error: 'username expected to be unique' });
+    res.status(400).json({ error: 'username expected to be unique' })
+  } else if (err.name === 'TokenExpiredError') {
+    res.status(401).json({ error: 'token expired' })
   }
 }
 
